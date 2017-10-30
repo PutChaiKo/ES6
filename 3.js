@@ -300,4 +300,36 @@
         console.log(id, status,number);
 
         // (5)函数的默认值
-        
+        jQuery.ajax = function(url, {
+            async = true,
+            beforeSend = function(){},
+            cache = true,
+            complete = function(){},
+            crossDomain = false,
+            global = true,
+            // more config
+        }){
+            // do stuff
+        };
+
+        // (6)遍历 Map 结构
+        const map = new Map();
+        map.set('frist', 'hello');
+        map.set('second', 'world');
+        for (let [key, value] of map)
+        {
+            console.log(key + " is " + value);
+        }
+        // 值获取键名或者键值
+        for (let [key] of map)
+        {
+
+        }
+
+        for (let [,value] of map)
+        {
+
+        }
+
+        // (7)输入模块的制定方法
+        const {SourceMapConsumer, SourceNode} = require("source-map");
