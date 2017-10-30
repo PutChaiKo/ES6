@@ -148,4 +148,156 @@
         var {message: msg = 'Something went wrong'} = {};
 
         // 默认值生效的条件是对象的属性值用那个等于 undefined
+        var {x = 3} = {x: undefined};
+
+        var {x = 3} = {x: null};
+
+        // 解构失败，变量值为 undefined
+        let {foo} = {bar: 'baz'};
+
+        // 报错
+        let {foo: {bar}} = {baz: 'baz'};
+        // 相当于下述代码
+        let _tmp = {baz: 'baz'};
+        _tmp.foo.bar
+
+        // 已声明的变量用于解构赋值，则要小心格式
+        // 错误的写法
+        let x;
+        {x} = {x: 1};   // 解析器将其{x}解析为代码块
+
+        // 正确的写法
+        let x;
+        ({x} = {x: 1}); // 不将大括号放在行首可以解决这个问题。
+
+        // 毫无意义但可以执行的赋值表达式
+        ({} = [true, false]);
+        ({} = 'abc');
+        ({} = []);
+
+        // 很方便将现有对象的方法赋值到某个变量上
+        let {log, sin, cos} = Math;
+        // Math {abs: ƒ, acos: ƒ, acosh: ƒ, asin: ƒ, asinh: ƒ, …}
+
+        // 可对数组进行对象属性的结构
+        let arr = [1, 2, 3];
+        let {0: first, [arr.length - 1]: last} = arr;
+
+    // 3.字符串的解构赋值
+        // 字符串会被转换成类似于数组的对象
+        const [a, b, c, d, e] = 'hello';
+
+        // length 属性解构赋值
+        let {length: len} = 'hello';
+
+    // 4.数值和布尔值的结构赋值
+        // 等号右边是数值和布尔值则会先转为对象
+        let {toString: s} = 123;
+        s === Number.prototype.toString;
+
+        let {toString: s} = true;
+        s === Boolean.prototype.toString;
+
+    // 5.函数参数的结构赋值
+        function add([x, y])
+        {
+            return x + y;
+        }
+        add([1, 2]);    // 数组传入参数的那一瞬间就被结构赋值给变量 x y
+
+        // 另一个例子
+        [[1, 2], [3, 4]].map(([a, b]) => a + b);
+
+        // 默认值
+        function move({x = 0, y = 0} = {})
+        {
+            return [x, y];
+        }
+        move({x: 3, y: 8})
+
+        // 默认值错误的写法
+        function move({x, y} = {x: 0, y: 0})    // 为参数指定默认值而不是为变量指定默认值
+        {
+            return [x, y];
+        }
+
+        move({x: 3, y: 8});
+        move({x: 3});
+        move({});
+        move();
+
+        // undefined 触发函数参数的默认值
+        [1, undefined, 3].map((x = 'yes') => x);
+        // [1, 'yes', 3]
+
+    // 6.圆括号问题
+        // 尽量别往模式中放圆括号
+        // (1)变量声明语句，下述全部报错
+        let [(a)] = [1];
+
+        let {x: (c)} = {};
+        let ({x: c}) = {};
+        let {(x: c)} = {};
+
+        let {o: ({p: p})} = {o: {p: 2}};
+
+        // (2)函数参数也属于变量声明，因此不能带有圆括号
+        function f([(z)]){return z;}
+        function f([z,(x)]){return x;}
+
+        // (3)赋值语句的模式
+        ({p: a}) = {p; 42};
+        ([a]) = [5];
+        [({p: a}), {x: c}] = [{}, {}];
+
+        // 可以放圆括号的情况
+        // 赋值语句的非模式部分
+        [(b)] = [3];
+        ({p: (d)} = {});
+        [(parseInt.prop)] = [3];
+
+    // 7.用途
+        // (1)变换变量的值
+        let x = 1;
+        let y = 2;
+        [x, y] = [y, x];
+
+        // (2)从函数返回多个值
+        // 返回一个数组
+        function example()
+        {
+            return [1, 2, 3];
+        }
+        let [a, b, c] = example();
+
+        // 返回一个对象
+        function example()
+        {
+            return {
+                foo: 1,
+                bar: 2
+            };
+        }
+        let {foo, bar} = example();
+
+        // (3)函数参数的定义
+        // 可以将一组参数与变量名对应起来
+        // 参数有次序
+        function f([x, y, z]) {...}
+        f([1, 2, 3]);
+
+        // 参数无次序
+        function f({x, y, z}) {...};
+        f({z: 3, y: 2, x: 1});
+
+        // (4)提取 JSON 数据
+        let jsonData = {
+            id: 42,
+            status: "OK",
+            data: [867, 5309]
+        }
+        let {id, status, data: number} = jsonData;
+        console.log(id, status,number);
+
+        // (5)函数的默认值
         
