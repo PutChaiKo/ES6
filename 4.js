@@ -161,4 +161,32 @@
             }
         }
 
-        
+        // 可放入任意 JS 表达式、运算、引用对象属性
+        let x = 1;
+        let y = 2;
+
+        `${x} + ${y} = ${x + y}`
+        `${x} + ${y * 2} = ${x + y * 2}`
+
+        let obj = {x: 1, y: 2};
+        `${obj.x + pbj.y}`
+
+        // 调用函数
+        function fn()
+        {
+            return "Helo World";
+        }
+
+        `foo ${fn()} bar`
+
+        // 如果不是字符串则调用 toString()方法
+        // 变量没有声明则会报错
+
+        // 嵌套
+        const tmpl = addrs => `
+        <table>
+        ${addrs.map(addr => `
+            <tr><td>${addr.first}</td></tr>
+            <tr><td>${addr.last}</td></tr>
+            `).join('')}
+        `;
