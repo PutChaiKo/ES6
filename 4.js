@@ -189,4 +189,33 @@
             <tr><td>${addr.first}</td></tr>
             <tr><td>${addr.last}</td></tr>
             `).join('')}
+            </table>
+        `;
+
+        // 使用上述嵌套
+        const data = [
+            {first: '<Jane>', last: 'Bond'},
+            {first: 'Lars', last: '<Croft>'},
+        ];
+
+        console.log(tmpl(data));
+
+        // 引用模板字符串本身
+        // 写法一
+        let str = 'return ' + '`Hello ${name}!`';
+        let func = new Function('name', str);
+        func('Jake')    // "Hello Jake!"
+
+        // 写法二
+        let  str = '(name) => `Hello ${name}!`';
+        let func = eval.call(null, str);
+        func('Jack')
+
+    // 11。实例：模板编译
+        let template = `
+        <ul>
+          <% for(let i = 0; i < data.supplies.length; I++) { %>
+            <li><%= data.supplies[i] %></li>
+          <% } %>
+        </ul>
         `;
